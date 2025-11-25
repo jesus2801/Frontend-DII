@@ -14,9 +14,6 @@ export default function AuthCallback() {
           let data;
           try { data = await r.json(); } catch { data = {}; }
           if (data.accessToken) {
-            // Guardar cookie por 1 día.
-            // No usar `secure` cuando se corre en HTTP (localhost),
-            // porque entonces el navegador no almacenaría la cookie.
             const secureFlag = window.location.protocol === 'https:' ? '; secure' : '';
             document.cookie = `token=${data.accessToken}; path=/; max-age=86400${secureFlag}`;
             console.log("Token guardado en cookie", data.accessToken);
