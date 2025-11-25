@@ -5,10 +5,12 @@ import { getLogs } from '@/lib/api';
 import { FileText } from 'lucide-react';
 
 interface Log {
-  id: string;
-  fecha: string; // O Date
-  accion: string; // "CREAR", "ELIMINAR", etc.
-  descripcion: string;
+  _id?: string;
+  id?: string;
+  time: string | Date; // fecha del log
+  action: string; // "Created", "Modified", "Deleted", etc.
+  data?: any;
+  errorMessage?: string;
 }
 
 export default function LogsPage() {
@@ -36,24 +38,24 @@ export default function LogsPage() {
           <div className="p-8 text-center" style={{ color: '#5A5A5A' }}>Cargando historial...</div>
         ) : (
           <ul className="divide-y" style={{ borderColor: '#D9D9D9' }}>
-            {logs.map((log) => (
-              <li key={log.id} className="p-4 flex flex-col sm:flex-row justify-between gap-2 hover:bg-gray-50">
+            {logs.map((log, index) => (
+              <li key={log.id || `log-${index}`} className="p-4 flex flex-col sm:flex-row justify-between gap-2 hover:bg-gray-50">
                 <div>
                   <span 
                     className="text-xs font-bold px-2 py-1 rounded uppercase mr-2"
                     style={{
-                      backgroundColor: log.accion === 'ELIMINAR' ? '#ffebee' : 
-                                      log.accion === 'CREAR' ? '#e8f5e9' : '#e3f2fd',
-                      color: log.accion === 'ELIMINAR' ? '#EA4335' : 
-                             log.accion === 'CREAR' ? '#34A853' : '#3A7BD5'
+                      backgroundColor: log.action === 'Deleted' ? '#ffebee' : 
+                                      log.action === 'Created' ? '#e8f5e9' : '#e3f2fd',
+                      color: log.action === 'Deleted' ? '#EA4335' : 
+                             log.action === 'Created' ? '#34A853' : '#3A7BD5'
                     }}
                   >
-                    {log.accion}
+                    {log.action}
                   </span>
-                  <span style={{ color: '#1A1A1A' }}>{log.descripcion}</span>
+                  <span style={{ color: '#1A1A1A' }}>{log.errorMessage || log.action}</span>
                 </div>
                 <div className="text-sm whitespace-nowrap" style={{ color: '#5A5A5A' }}>
-                  {new Date(log.fecha).toLocaleString()}
+                  {log.time ? new Date(log.time).toLocaleString() : 'N/A'}
                 </div>
               </li>
             ))}

@@ -22,7 +22,7 @@ function clearAuthAndRedirect() {
 // ==========================================
 
 interface ApiRequestOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: FormData | object;
   cache?: RequestCache;
   customError?: string;
@@ -140,10 +140,12 @@ export async function createPersona(data: FormData) {
 }
 
 export async function getPersonas() {
-  return apiRequest('/personas', {
+  const response = await apiRequest<any>('/personas/users', {
     method: 'GET',
     cache: 'no-store',
   });
+  // Backend returns { users: [...], pagination: {...} }
+  return Array.isArray(response) ? response : (response?.users || []);
 }
 
 export async function getPersonaById(id: string) {
@@ -156,7 +158,7 @@ export async function getPersonaById(id: string) {
 
 export async function updatePersona(id: string, data: FormData) {
   return apiRequest(`/personas/${id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     body: data,
     customError: 'Error al actualizar persona',
   });
@@ -176,7 +178,7 @@ export async function deletePersona(id: string) {
 export async function queryRAG(question: string) {
   return apiRequest('/rag/consulta', {
     method: 'POST',
-    body: { question },
+    body: { pregunta: question },
     customError: 'Error en el servicio RAG',
   });
 }
@@ -186,9 +188,13 @@ export async function queryRAG(question: string) {
 // ==========================================
 
 export async function getLogs() {
-  return apiRequest('/logs', {
+  const response = await apiRequest<any>('/logs', {
     method: 'GET',
     cache: 'no-store',
     customError: 'Error al obtener logs',
   });
+  // Backend returns { count: N, logs: [...] } - extract logs array
+  if (!response) return [];
+  if (Array.isArray(response)) return response;
+  return response?.logs || [];
 }

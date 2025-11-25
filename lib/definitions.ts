@@ -49,8 +49,18 @@ export const PersonaSchema = z.object({
 
 export type PersonaFormData = z.infer<typeof PersonaSchema>;
 
-// Tipo para respuesta del Backend (puede incluir ID o timestamps)
-export interface Persona extends Omit<PersonaFormData, 'foto'> {
-  id: string; // O el nroDocumento si es la PK
-  fotoUrl?: string;
+// Tipo para respuesta del Backend (mapear campos del backend al frontend)
+export interface Persona {
+  id: string; // nroDocumento en DB
+  idType: 'TI' | 'CC'; // tipoDocumento
+  firstName: string; // primerNombre
+  secondName?: string; // segundoNombre
+  surname: string; // apellidos
+  birthdate: string | Date; // fechaNacimiento
+  gender: 'Masculino' | 'Femenino' | 'No binario' | 'Prefiero no reportar';
+  email: string;
+  phone: string; // celular
+  photoUrl?: string; // fotoUrl
+  createdAt?: string;
+  updatedAt?: string;
 }

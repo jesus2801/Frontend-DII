@@ -35,7 +35,12 @@ export default function PersonasPage() {
       // Recargar la lista visualmente filtrando el eliminado
       setPersonas(personas.filter((p) => p.id !== id));
     } catch (err) {
-      alert('Error al eliminar');
+      const errorMsg = err instanceof Error ? err.message : 'Error al eliminar';
+      if (errorMsg.includes('403') || errorMsg.includes('permisos')) {
+        alert('No tienes permisos para eliminar personas. Solo administradores pueden eliminar.');
+      } else {
+        alert(errorMsg);
+      }
     }
   };
 
@@ -79,13 +84,13 @@ export default function PersonasPage() {
               personas.map((persona) => (
                 <tr key={persona.id} className="hover:bg-gray-50 transition">
                   <td className="p-4 font-medium" style={{ color: '#1A1A1A' }}>
-                    {persona.tipoDocumento} {persona.nroDocumento}
+                    {persona.idType} {persona.id}
                   </td>
                   <td className="p-4" style={{ color: '#1A1A1A' }}>
-                    {persona.primerNombre} {persona.apellidos}
+                    {persona.firstName} {persona.surname}
                   </td>
                   <td className="p-4" style={{ color: '#5A5A5A' }}>{persona.email}</td>
-                  <td className="p-4" style={{ color: '#5A5A5A' }}>{persona.celular}</td>
+                  <td className="p-4" style={{ color: '#5A5A5A' }}>{persona.phone}</td>
                   <td className="p-4 flex justify-center gap-3">
                     {/* Botón Editar: lleva a /personas/[ID] */}
                     <Link 

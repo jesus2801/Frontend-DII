@@ -16,10 +16,10 @@ export default function RagPage() {
     setResponse(''); // Limpiar anterior
     try {
       const data = await queryRAG(question);
-      // Asumiendo que el backend devuelve { answer: "Pedro Pérez..." }
-      setResponse(data.answer); 
+      // Backend devuelve { respuesta: "...", metodo: "...", inteligencia: {...} }
+      setResponse(data.respuesta || data.answer || 'Sin respuesta'); 
     } catch (err) {
-      setResponse('Error al consultar el modelo de IA.');
+      setResponse(`Error: ${err instanceof Error ? err.message : 'Error al consultar el modelo de IA.'}`);
     } finally {
       setLoading(false);
     }

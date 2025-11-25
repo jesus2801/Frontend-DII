@@ -7,13 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { PersonaSchema, PersonaFormData } from '@/lib/definitions'; 
 import { getPersonaById, updatePersona } from '@/lib/api';
 import { useRouter } from 'next/navigation'; // OJO: Importar de next/navigation
+import { use } from 'react'; // Importar use para unwrap Promise params
 
 // Schema modificado para edición: la foto puede venir vacía (no se actualiza)
 const EditSchema = PersonaSchema.extend({
   foto: PersonaSchema.shape.foto.optional(), 
 });
 
-export default function EditarPersonaPage({ params }: { params: { id: string } }) {
+export default function EditarPersonaPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params); // Unwrap Promise params
   const router = useRouter();
   const [isLoadingData, setIsLoadingData] = useState(true);
 
@@ -23,29 +25,59 @@ export default function EditarPersonaPage({ params }: { params: { id: string } }
 
   // 1. Cargar datos de la persona al entrar
   useEffect(() => {
-    getPersonaById(params.id).then((data) => {
-      // Formatear fecha para el input type="date" (YYYY-MM-DD)
-      const fechaFormat = data.fechaNacimiento ? new Date(data.fechaNacimiento).toISOString().split('T')[0] : '';
+    getPersonaById(id).then((data) => {
+      // Mapear campos backend (firstName, surname, etc.) a frontend schema (primerNombre, apellidos, etc.)
+      const mappedData = {
+        tipoDocumento: data.idType,
+        nroDocumento: data.id,
+        primerNombre: data.firstName,
+        segundoNombre: data.secondName,
+        apellidos: data.surname,
+        fechaNacimiento: data.birthdate,
+        genero: data.gender,
+        email: data.email,
+        celular: data.phone,
+      };
       
-      reset({ ...data, fechaNacimiento: fechaFormat });
+      // Formatear fecha para el input type="date" (YYYY-MM-DD)
+      const fechaFormat = mappedData.fechaNacimiento ? new Date(mappedData.fechaNacimiento).toISOString().split('T')[0] : '';
+      
+      reset({ ...mappedData, fechaNacimiento: fechaFormat });
       setIsLoadingData(false);
     });
-  }, [params.id, reset]);
+  }, [id, reset]);
 
   // 2. Enviar actualización
   const onSubmit = async (data: PersonaFormData) => {
     const formData = new FormData();
+    
+    // Mapeo de campos Frontend -> Backend
+    const fieldMapping: Record<string, string> = {
+      nroDocumento: 'id',
+      tipoDocumento: 'idType',
+      primerNombre: 'firstName',
+      segundoNombre: 'secondName',
+      apellidos: 'surname',
+      fechaNacimiento: 'birthdate',
+      genero: 'gender',
+      email: 'email',
+      celular: 'phone',
+      foto: 'foto'
+    };
+    
     Object.entries(data).forEach(([key, value]) => {
+      const backendKey = fieldMapping[key] || key;
+      
       // Solo enviamos la foto si el usuario subió una nueva
       if (key === 'foto') {
-         if (value && value.length > 0) formData.append('foto', value[0]);
-      } else {
-         formData.append(key, value as string);
+         if (value && value.length > 0) formData.append(backendKey, value[0]);
+      } else if (value !== undefined && value !== null && value !== '') {
+         formData.append(backendKey, value as string);
       }
     });
 
     try {
-      await updatePersona(params.id, formData);
+      await updatePersona(id, formData);
       alert('Actualizado correctamente');
       router.push('/personas');
     } catch (e) {
