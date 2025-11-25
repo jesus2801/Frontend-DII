@@ -28,28 +28,28 @@ export default function RagPage() {
   return (
     <div className="container mx-auto p-6 max-w-3xl">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold flex justify-center items-center gap-2">
-          <Bot className="w-8 h-8 text-blue-600" />
+        <h2 className="text-3xl font-bold flex justify-center items-center gap-2" style={{ color: '#1A1A1A' }}>
+          <Bot className="w-8 h-8" style={{ color: '#3A7BD5' }} />
           Consulta Inteligente (RAG)
         </h2>
-        <p className="text-slate-500">Pregunta sobre los empleados registrados en lenguaje natural.</p>
+        <p style={{ color: '#5A5A5A' }}>Pregunta sobre los empleados registrados en lenguaje natural.</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-lg border p-6 min-h-[400px] flex flex-col justify-between">
+      <div className="rounded-xl shadow-lg p-6 min-h-[400px] flex flex-col justify-between" style={{ backgroundColor: '#FFFFFF', border: '1px solid #D9D9D9' }}>
         
         {/* Área de Respuesta */}
-        <div className="flex-1 mb-6 bg-slate-50 rounded-lg p-4 overflow-y-auto">
+        <div className="flex-1 mb-6 rounded-lg p-4 overflow-y-auto" style={{ backgroundColor: '#F5F5F5' }}>
             {loading ? (
-                <div className="flex items-center gap-2 text-slate-500">
+                <div className="flex items-center gap-2" style={{ color: '#5A5A5A' }}>
                     <span className="animate-spin">🌀</span> Analizando base de datos...
                 </div>
             ) : response ? (
                 <div>
-                    <h4 className="font-bold text-slate-700 mb-2">Respuesta:</h4>
-                    <p className="text-slate-800 leading-relaxed">{response}</p>
+                    <h4 className="font-bold mb-2" style={{ color: '#1A1A1A' }}>Respuesta:</h4>
+                    <p className="leading-relaxed" style={{ color: '#1A1A1A' }}>{response}</p>
                 </div>
             ) : (
-                <p className="text-slate-400 text-center italic mt-10">
+                <p className="text-center italic mt-10" style={{ color: '#5A5A5A' }}>
                     Ej: "¿Cuál es el empleado más joven que se ha registrado?"
                 </p>
             )}
@@ -62,12 +62,18 @@ export default function RagPage() {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Haz una pregunta..."
-            className="flex-1 border border-slate-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 rounded-full px-4 py-3 focus:outline-none focus:ring-2"
+            style={{ border: '1px solid #D9D9D9', color: '#1A1A1A' }}
+            onFocus={(e) => e.currentTarget.style.borderColor = '#3A7BD5'}
+            onBlur={(e) => e.currentTarget.style.borderColor = '#D9D9D9'}
           />
           <button 
             type="submit" 
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 transition-colors disabled:opacity-50"
+            className="text-white rounded-full p-3 transition-colors disabled:opacity-50"
+            style={{ backgroundColor: '#3A7BD5' }}
+            onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#2d5fa3')}
+            onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#3A7BD5')}
           >
             <Send className="w-5 h-5" />
           </button>

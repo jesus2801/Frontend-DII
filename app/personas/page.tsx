@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getPersonas, deletePersona, Persona } from '@/lib/api';
+import { getPersonas, deletePersona } from '@/lib/api';
+import { Persona } from '@/lib/definitions';
 import { Trash2, Edit, Plus } from 'lucide-react';
 
 export default function PersonasPage() {
@@ -38,55 +39,60 @@ export default function PersonasPage() {
     }
   };
 
-  if (loading) return <div className="p-10 text-center">Cargando datos...</div>;
-  if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
+  if (loading) return <div className="p-10 text-center" style={{ color: '#5A5A5A' }}>Cargando datos...</div>;
+  if (error) return <div className="p-10 text-center" style={{ color: '#EA4335' }}>{error}</div>;
 
   return (
     <main className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Listado de Personas</h1>
+        <h1 className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>Listado de Personas</h1>
         <Link 
           href="/personas/crear" 
-          className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-700"
+          className="text-white px-4 py-2 rounded flex items-center gap-2"
+          style={{ backgroundColor: '#3A7BD5' }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2d5fa3'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#3A7BD5'}
         >
           <Plus size={18} /> Nueva Persona
         </Link>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow border">
+      <div className="overflow-x-auto rounded-lg shadow" style={{ backgroundColor: '#FFFFFF', border: '1px solid #D9D9D9' }}>
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-100 text-slate-600 uppercase font-semibold">
+          <thead className="uppercase font-semibold" style={{ backgroundColor: '#F5F5F5' }}>
             <tr>
-              <th className="p-4">Documento</th>
-              <th className="p-4">Nombre Completo</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Celular</th>
-              <th className="p-4 text-center">Acciones</th>
+              <th className="p-4" style={{ color: '#5A5A5A' }}>Documento</th>
+              <th className="p-4" style={{ color: '#5A5A5A' }}>Nombre Completo</th>
+              <th className="p-4" style={{ color: '#5A5A5A' }}>Email</th>
+              <th className="p-4" style={{ color: '#5A5A5A' }}>Celular</th>
+              <th className="p-4 text-center" style={{ color: '#5A5A5A' }}>Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y" style={{ borderColor: '#D9D9D9' }}>
             {personas.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-6 text-center text-slate-500">
+                <td colSpan={5} className="p-6 text-center" style={{ color: '#5A5A5A' }}>
                   No hay personas registradas.
                 </td>
               </tr>
             ) : (
               personas.map((persona) => (
-                <tr key={persona.id} className="hover:bg-slate-50 transition">
-                  <td className="p-4 font-medium">
+                <tr key={persona.id} className="hover:bg-gray-50 transition">
+                  <td className="p-4 font-medium" style={{ color: '#1A1A1A' }}>
                     {persona.tipoDocumento} {persona.nroDocumento}
                   </td>
-                  <td className="p-4">
+                  <td className="p-4" style={{ color: '#1A1A1A' }}>
                     {persona.primerNombre} {persona.apellidos}
                   </td>
-                  <td className="p-4 text-slate-600">{persona.email}</td>
-                  <td className="p-4 text-slate-600">{persona.celular}</td>
+                  <td className="p-4" style={{ color: '#5A5A5A' }}>{persona.email}</td>
+                  <td className="p-4" style={{ color: '#5A5A5A' }}>{persona.celular}</td>
                   <td className="p-4 flex justify-center gap-3">
                     {/* Botón Editar: lleva a /personas/[ID] */}
                     <Link 
                       href={`/personas/${persona.id}`} 
-                      className="text-blue-600 hover:text-blue-800"
+                      style={{ color: '#3A7BD5' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#2d5fa3'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#3A7BD5'}
                       title="Editar"
                     >
                       <Edit size={20} />
@@ -95,7 +101,9 @@ export default function PersonasPage() {
                     {/* Botón Borrar */}
                     <button 
                       onClick={() => handleDelete(persona.id)}
-                      className="text-red-600 hover:text-red-800"
+                      style={{ color: '#EA4335' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#d32f2f'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#EA4335'}
                       title="Eliminar"
                     >
                       <Trash2 size={20} />

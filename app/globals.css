@@ -1,8 +1,20 @@
 @import "tailwindcss";
 
 :root {
+  /* Paleta de colores corporativa */
+  --azul-marino: #0A2240;
+  --azul-profesional: #1F4E79;
+  --azul-claro: #3A7BD5;
+  --gris-oscuro: #1A1A1A;
+  --gris-texto: #5A5A5A;
+  --gris-borde: #D9D9D9;
+  --blanco: #FFFFFF;
+  --verde-exito: #34A853;
+  --amarillo-alerta: #F4B400;
+  --rojo-error: #EA4335;
+  
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1A1A1A;
 }
 
 @theme inline {
@@ -10,13 +22,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

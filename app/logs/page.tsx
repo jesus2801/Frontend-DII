@@ -25,34 +25,39 @@ export default function LogsPage() {
   return (
     <main className="container mx-auto p-6 max-w-4xl">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-slate-800 text-white rounded-lg">
+        <div className="p-3 text-white rounded-lg" style={{ backgroundColor: '#0A2240' }}>
           <FileText size={24} />
         </div>
-        <h1 className="text-2xl font-bold text-slate-800">Auditoría del Sistema</h1>
+        <h1 className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>Auditoría del Sistema</h1>
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden border">
+      <div className="shadow rounded-lg overflow-hidden" style={{ backgroundColor: '#FFFFFF', border: '1px solid #D9D9D9' }}>
         {loading ? (
-          <div className="p-8 text-center text-slate-500">Cargando historial...</div>
+          <div className="p-8 text-center" style={{ color: '#5A5A5A' }}>Cargando historial...</div>
         ) : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y" style={{ borderColor: '#D9D9D9' }}>
             {logs.map((log) => (
-              <li key={log.id} className="p-4 hover:bg-slate-50 flex flex-col sm:flex-row justify-between gap-2">
+              <li key={log.id} className="p-4 flex flex-col sm:flex-row justify-between gap-2 hover:bg-gray-50">
                 <div>
-                  <span className={`text-xs font-bold px-2 py-1 rounded uppercase mr-2 ${
-                    log.accion === 'ELIMINAR' ? 'bg-red-100 text-red-700' : 
-                    log.accion === 'CREAR' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                  }`}>
+                  <span 
+                    className="text-xs font-bold px-2 py-1 rounded uppercase mr-2"
+                    style={{
+                      backgroundColor: log.accion === 'ELIMINAR' ? '#ffebee' : 
+                                      log.accion === 'CREAR' ? '#e8f5e9' : '#e3f2fd',
+                      color: log.accion === 'ELIMINAR' ? '#EA4335' : 
+                             log.accion === 'CREAR' ? '#34A853' : '#3A7BD5'
+                    }}
+                  >
                     {log.accion}
                   </span>
-                  <span className="text-slate-700">{log.descripcion}</span>
+                  <span style={{ color: '#1A1A1A' }}>{log.descripcion}</span>
                 </div>
-                <div className="text-sm text-slate-400 whitespace-nowrap">
+                <div className="text-sm whitespace-nowrap" style={{ color: '#5A5A5A' }}>
                   {new Date(log.fecha).toLocaleString()}
                 </div>
               </li>
             ))}
-            {logs.length === 0 && <li className="p-4 text-center text-slate-500">No hay registros aún.</li>}
+            {logs.length === 0 && <li className="p-4 text-center" style={{ color: '#5A5A5A' }}>No hay registros aún.</li>}
           </ul>
         )}
       </div>
