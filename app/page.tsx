@@ -1,65 +1,31 @@
-import Image from "next/image";
+import Link from "next/link";
+import { UserPlus, Search, Bot, FileText, Trash2, Edit } from "lucide-react";
+
+const MenuOption = ({ title, href, icon: Icon, color }: any) => (
+  <Link 
+    href={href} 
+    className={`flex flex-col items-center justify-center p-6 bg-white border rounded-xl shadow-sm hover:shadow-md transition-all hover:scale-105 group cursor-pointer`}
+  >
+    <div className={`p-4 rounded-full ${color} text-white mb-4 group-hover:opacity-90`}>
+      <Icon size={32} />
+    </div>
+    <h3 className="font-semibold text-slate-700 text-center">{title}</h3>
+  </Link>
+);
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="container mx-auto p-12">
+      <h1 className="text-4xl font-bold text-center mb-12 text-slate-800">Menú Principal</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <MenuOption title="Crear Personas" href="/personas/crear" icon={UserPlus} color="bg-blue-600" />
+        <MenuOption title="Modificar Datos" href="/personas" icon={Edit} color="bg-orange-500" />
+        <MenuOption title="Consultar Datos" href="/personas" icon={Search} color="bg-green-600" />
+        <MenuOption title="Consulta Lenguaje Natural" href="/rag" icon={Bot} color="bg-purple-600" />
+        <MenuOption title="Borrar Personas" href="/personas" icon={Trash2} color="bg-red-600" />
+        <MenuOption title="Consultar Log" href="/logs" icon={FileText} color="bg-slate-600" />
+      </div>
+    </main>
   );
 }
