@@ -38,11 +38,17 @@ export const PersonaSchema = z.object({
     .regex(/^\d+$/, "Solo números"),
   foto: z
     .any()
-    // En el frontend validamos si es FileList (del input)
-    .refine((files) => files?.length == 1, "La foto es obligatoria.")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo es 2MB.`)
+    .optional()
     .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      files => !files || files.length === 0 || files.length === 1,
+      "Sólo puedes subir una imagen."
+    )
+    .refine(
+      files => !files || files.length === 0 || files[0]?.size <= MAX_FILE_SIZE,
+      `El tamaño máximo es 2MB.`
+    )
+    .refine(
+      files => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
       "Formato no soportado (.jpg, .jpeg, .png, .webp)"
     ),
 });
