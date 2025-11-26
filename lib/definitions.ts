@@ -6,9 +6,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 // Esquema principal de Persona
 export const PersonaSchema = z.object({
-  tipoDocumento: z.enum(["CC", "TI"], {
-    errorMap: () => ({ message: "Seleccione un tipo válido (CC o TI)" }),
-  }),
+  tipoDocumento: z.enum(["CC", "TI"], { error: "Seleccione un tipo válido (CC o TI)" }),
   nroDocumento: z
     .string()
     .min(5, "Mínimo 5 dígitos")
